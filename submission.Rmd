@@ -1,0 +1,63 @@
+---
+title: "HDAT 9600 Team Based Learning Activity"
+subtitle: "TBLA 1. Exploratory data analayis"
+author: "A. Student"
+date: "01/01/1990"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instructions
+
+Choose three key variables from the eclosed heart rate data. For each variable you should provide a univariate summary consisting of an appropriate plot and one or two sentences describing the results. You should also provide an appropriate bivariate plot and summary sentence for each of the three two-way combinations of your chosen variables. 
+
+## Reading the data
+
+We can use the `read.csv()` function from the `utils` package to read the csv file in to R and the `head()` function to get a sneak peek at the data. 
+
+```{r}
+
+hr <- read.csv('heart_rate.csv')
+
+head(hr)
+```
+
+Note that we are using a relative path to the data file here. The path just comprises the file name so R expects to find the csv file in the same folder as this .Rmd file. We don't need to use an absolute path like "/Users/Documents/HDAT9600/TBLAs/exploratory-data-analysis/heart_rate.csv". Using relative paths in a project environment means that different users can run the same code without having to specify different root folders. 
+
+
+## Submission
+Work with your group to add your analysis to this file using appropriate Rmarkdown formatting and R code chunks. Add and commit your changes as you go. Once you are ready, push all your changes to submit. If necessary, check out the introductory tutorials on knitr and git. 
+
+## An example univariate summary (delete this in your submission)
+
+Below is an example univariate summary for the systolic blood pressure variable. 
+
+#### Using `hist()` for a quick basic histogram
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# Note the chunk options used to suppress the code (echo = FALSE) and unwanted warnings (warnings = FALSE/message = FALSE) in the rendered document
+
+# summary(hr$systol)
+
+hist(hr$systol)
+
+```
+
+#### Or using `ggplot()` with some color, labels and a title
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# Note the chunk options used to suppress the code (echo = FALSE) and unwanted warnings (warnings = FALSE/message = FALSE) in the rendered document
+library(ggplot2)
+ggplot(data = hr, aes(x=systol)) + 
+  geom_histogram(binwidth = 10, color = 'darkblue', fill = 'lightblue') +
+  labs(x = "Systolic blood pressure (mmHg)",
+       y = "Count",
+       title = "Systolic blood pressure")
+
+```
+
+#### Interpretation
+Systolic blood pressure ranged from 70 to 200 mmHg, with a median of 132 mmHg and inter-quartile range of 121 to 143 mmHg. 
