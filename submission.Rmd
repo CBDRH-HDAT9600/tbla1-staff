@@ -1,56 +1,83 @@
 ---
 title: "HDAT 9600 Team Based Learning Activity"
 subtitle: "TBLA 1. Exploratory data analayis"
-author: "A. Student"
-date: "01/01/1990"
+author: "Mark Hanly"
+date: "21 Feb 2022"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+hr <- read.csv('heart_rate.csv')
+
+library(ggplot2)
+library(emo)
 ```
 
-## Instructions
+### Housekeeping
 
-Choose three key variables from the eclosed heart rate data. For each variable you should provide a univariate summary consisting of an appropriate plot and one or two sentences describing the results. You should also provide an appropriate bivariate plot and summary sentence for each of the three two-way combinations of your chosen variables. 
+1. `r emo::ji("video")` Cameras and recording 
 
-## Reading the data
+1. `r emo::ji("question")` Tutorial questions: names list 
 
-We can use the `read.csv()` function from the `utils` package to read the csv file in to R and the `head()` function to get a sneak peek at the data. 
+1. `r emo::ji("team")` Team formation and communication 
+    * There is a Discussion feature in GitHub. Visible to class admin FYI. 
+    * Welcome to set up private Teams group or use other platforms. 
+    * Need to think about how to handle collaboration on shared project (Git commit example)
+    
+1. `r emo::ji("computer")` Tutorial packages 
+    * Deployed online
+    * Accessible locally 
+    * Source code on GitHub
+
+***
+
+### TBLA Submissions
+
+#### `r emo::ji("rocket")` Highlights 
+
+* Updating title info (e.g. authors/dates)  
+* Everyone embraced ggplot, lots of nice use of colour! `r emo::ji("graph")`
+* Sensible graph choices.
+* Using units of measurement; sensible and consistent choice for number of decimal places. 
+
+> Weight ranged from 32.2kg to 117.0kg, with a median weight of 69.5kg and inter-quartile range of 61.0 to 78.6kg.
+
+> Age ranged from 16 to 80 years, with a median of 39 years and inter-quartile range of 28 to 49 years.
+
+* Please never say (for example) weight was 70.34522. That level of precision is meaningless, and makes it more difficult to digest. 
+
+* Using absolute and relative frequencies to summarise data.  
+
+> There were 434 non-smokers and 185 smokers in the data set out of 619 people. About 30% of the population in the data set were the smokers.
+
+#### `r emo::ji("mountain")` Opportunities to improve 
+
+* Make sure to read the instructions carefully! (e.g. "Delete this in your submission" instruction)  
+* Output with no comments  
+* Output where **formatting has failed_
+* Mindful of missing data, e.g. cholesterol missing 266 observations
+
+***
+
+### Overview
+
+The three key variables I will select are
+
+1. Systolic blood pressure (`systol`)
+1. Body Mass index (`bmi`)
+1. Sex (`sex`)  
+
+Below I examine the univariate distribution for each variable and the three bivariate relationships. 
+
+### Univariate analysis
+
+#### Systolic blood pressure
 
 ```{r}
 
-hr <- read.csv('heart_rate.csv')
+summary(hr$systol)
 
-head(hr)
-```
-
-Note that we are using a relative path to the data file here. The path just comprises the file name so R expects to find the csv file in the same folder as this .Rmd file. We don't need to use an absolute path like "/Users/Documents/HDAT9600/TBLAs/exploratory-data-analysis/heart_rate.csv". Using relative paths in a project environment means that different users can run the same code without having to specify different root folders. 
-
-
-## Submission
-Work with your group to add your analysis to this file using appropriate Rmarkdown formatting and R code chunks. Add and commit your changes as you go. Once you are ready, push all your changes to submit. If necessary, check out the introductory tutorials on knitr and git. 
-
-## An example univariate summary (delete this in your submission)
-
-Below is an example univariate summary for the systolic blood pressure variable. 
-
-#### Using `hist()` for a quick basic histogram
-
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-# Note the chunk options used to suppress the code (echo = FALSE) and unwanted warnings (warnings = FALSE/message = FALSE) in the rendered document
-
-# summary(hr$systol)
-
-hist(hr$systol)
-
-```
-
-#### Or using `ggplot()` with some color, labels and a title
-
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-# Note the chunk options used to suppress the code (echo = FALSE) and unwanted warnings (warnings = FALSE/message = FALSE) in the rendered document
-library(ggplot2)
 ggplot(data = hr, aes(x=systol)) + 
   geom_histogram(binwidth = 10, color = 'darkblue', fill = 'lightblue') +
   labs(x = "Systolic blood pressure (mmHg)",
@@ -59,5 +86,131 @@ ggplot(data = hr, aes(x=systol)) +
 
 ```
 
-#### Interpretation
-Systolic blood pressure ranged from 70 to 200 mmHg, with a median of 132 mmHg and inter-quartile range of 121 to 143 mmHg. 
+
+**Interpretation:**  
+Systolic blood pressure is normally distributed with a with a median of 132 mmHg and inter-quartile range of 121 to 143 mmHg and a range from 70 to 200 mmHg. 
+
+#### BMI
+
+```{r}
+summary(hr$bmi)
+
+ggplot(data = hr, aes(x=bmi)) + 
+  geom_histogram(binwidth = 1, color = 'darkblue', fill = 'lightblue') +
+  labs(x = bquote("BMI"~(kg/m^2)),
+       y = "Count",
+       title = "Body Mass Index")
+
+```
+
+
+**Interpretation:**  
+Body mass index was approximately normally distributed with a mean of 24.2 kg/m^2^ and an interquartile range of 21.8 - 26.0 kg/m^2^. There was a long right tail with a range from 17.0 - 43.3 kg/m^2^. The records were missing information on BMI. 
+
+#### Sex
+
+```{r}
+table(hr$sex)
+table(hr$sex)/nrow(hr)
+
+ggplot(data = hr, aes(x=sex)) + 
+  geom_bar(color = 'darkblue', fill = 'lightblue') +
+  labs(x = NULL,
+       y = "Count",
+       title = "Sex")
+
+```
+
+
+**Interpretation:**  
+The dataset included 273 women (44%) and 346 men (56%).
+
+*** 
+
+### Bivariate analyses
+
+#### Systolic blood pressure and BMI
+
+```{r}
+
+ggplot(data = hr, aes(x = bmi, y = systol)) +
+  geom_point() + 
+    labs(x = bquote("BMI"~(kg/m^2)),
+       y = "Systolic blood pressure (mmHg)",
+       title = "Systolic blood pressure and BMI")
+
+```
+**Interpretation:**  
+There appears to be a slight positive association between systolic blood pressure and BMI. The correlation between the two variables was `r round(cor(hr$systol, hr$bmi, use = 'complete.obs'), digits = 2)`.
+
+#### Systolic blood pressure and sex
+
+```{r}
+
+ggplot(data = hr, aes(x = systol, y = sex)) +
+  geom_boxplot() + 
+    labs(x = "Systolic blood pressure (mmHg)",
+       y = "Sex",
+       title = "Systolic blood pressure and sex")
+
+```
+
+**Interpretation:**  
+
+The men in this sample had slightly higher blood pressure (`r round(mean(hr$systol[hr$sex=='male']))` mmHg on average) compared to women (`r round(mean(hr$systol[hr$sex=='female']))` mmHg on average).
+
+
+#### Sex and BMI
+
+```{r}
+
+ggplot(data = hr, aes(x = bmi, y = sex)) +
+  geom_boxplot() + 
+    labs(x = bquote("BMI"~(kg/m^2)),
+       y = "Sex",
+       title = "BMI and sex")
+
+```
+
+**Interpretation:**  
+
+The men in this sample had slightly higher BMI (`r round(mean(hr$bmi[hr$sex=='male'], na.rm = T), digits = 1)` kg/m^2^ on average) compared to women (`r round(mean(hr$bmi[hr$sex=='female'], na.rm = T), digits = 1)` kg/m^2^ on average).
+
+
+*** 
+
+### Multivariate summary
+
+```{r}
+
+ggplot(hr, aes(bmi, systol, group = sex, color = sex, fill = sex, shape = sex)) + 
+  geom_point(alpha = .6) +
+  labs(x = bquote("BMI"~(kg/m^2)), y = "Systolic blood pressure (mmHg)") +
+  theme(legend.position = c(.88, .85), legend.background = element_rect(fill="transparent"), legend.title = element_text(size = 0))
+
+
+```
+
+**Interpretation:**  
+There appears to be a positive relationship between BMI and systolic blood pressure for both men and women, although men tend to have a higher BMI overall.  
+
+
+*** 
+
+## Resources
+
+### Different types of bivariate analysis 
+
+![](https://miro.medium.com/max/1400/1*mWQZ7fH5a52LL9Arf5jNtw.png)
+
+From this medium.com blogpost by [Ayobami Akiode](https://ayobamiakiode.medium.com/)
+
+
+### Measuring association for different combination of variable types
+
+see https://www.statisticssolutions.com/levels-of-measurement/
+
+
+### Choice of visualisation for different combination of variable types
+
+See the [ggplot2 cheatsheet](https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf) for inspiration
