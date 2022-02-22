@@ -3,7 +3,7 @@ title: "HDAT 9600 Team Based Learning Activity"
 subtitle: "TBLA 1. Exploratory data analayis"
 author: "Mark Hanly"
 date: "21 Feb 2022"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
